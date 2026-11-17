@@ -1,0 +1,8 @@
+build
+mx.scratch
+!.settings
+CMakeLists.txt
+CMakePresets.json
+cmake/
+.vscode/
+.clangd
