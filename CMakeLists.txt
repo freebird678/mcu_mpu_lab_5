@@ -35,8 +35,8 @@ enable_language(C ASM)
 add_executable(${CMAKE_PROJECT_NAME}
     Core/Inc/fsm_cmd_parser.h
     Core/Src/fsm_cmd_parser.c
-    Core/Inc/fsm_uart_comm.h
-    Core/Src/fsm_uart_comm.c)
+    Core/Inc/fsm_app_control.h
+    Core/Src/fsm_app_control.c)
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
@@ -69,4 +69,12 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
     stm32cubemx
 
     # Add user defined libraries
+)
+
+# Generate Intel HEX file post-build
+add_custom_command(
+    TARGET ${CMAKE_PROJECT_NAME} 
+    POST_BUILD
+    COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${CMAKE_PROJECT_NAME}> ${CMAKE_PROJECT_NAME}.hex
+    # $<...> is a generator expression that evaluates to the full path of the target file
 )
