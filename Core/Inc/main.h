@@ -69,7 +69,7 @@ extern "C"
   /* USER CODE BEGIN EC */
 #define TIM2_TICK 1U          // milliseconds
 #define LED_PERIOD 500U       // milliseconds
-#define LED_PWM_DURATION 250U // 50% duty cycle, milliseconds
+#define LED_PWM_DURATION 150U // 30% duty cycle, milliseconds
 #define ARQ_TIMEOUT 3000U     // 3 seconds timeout
 #define TX_BUF_SIZE 64
 #define RX_BUF_SIZE 64
