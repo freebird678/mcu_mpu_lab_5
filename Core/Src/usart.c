@@ -191,12 +191,22 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     {
       if (uart2_ctx.rx_byte == '\r' || uart2_ctx.rx_byte == '\n')
       {
-        if (uart2_ctx.rx_index > 0)
+        /* Ignore line endings; commands are framed by '!' and '#' */
+      }
+      else if (uart2_ctx.rx_byte == '!')
+      {
+        uart2_ctx.rx_index = 0;
+        uart2_ctx.rx_buf[uart2_ctx.rx_index++] = '!';
+      }
+      else if (uart2_ctx.rx_byte == '#')
+      {
+        if (uart2_ctx.rx_index < (RX_BUF_SIZE - 1))
         {
-          uart2_ctx.rx_buf[uart2_ctx.rx_index] = '\0';
-          uart2_ctx.rx_ready = 1;
-          uart2_ctx.rx_index = 0;
+          uart2_ctx.rx_buf[uart2_ctx.rx_index++] = '#';
         }
+        uart2_ctx.rx_buf[uart2_ctx.rx_index] = '\0';
+        uart2_ctx.rx_ready = 1;
+        uart2_ctx.rx_index = 0;
       }
       else if (uart2_ctx.rx_index < (RX_BUF_SIZE - 1))
       {

@@ -40,12 +40,15 @@ void fsm_appCtrl_run(sys_event evt)
         {
             uint32_t adc_val = HAL_ADC_GetValue(&hadc1);
             uint32_t voltage_mv = (adc_val * 3300UL) / 4095UL;
-            snprintf(fsm_appctrl.buffer, sizeof(fsm_appctrl.buffer), "!ADC=%lumV#\r\n", (unsigned long)voltage_mv);
+            snprintf(fsm_appctrl.buffer, sizeof(fsm_appctrl.buffer), "\r!ADC=%lumV#\r", (unsigned long)voltage_mv);
             uart2_send(fsm_appctrl.buffer);
             break;
         }
         case EVT_CMD_RST:
             fsm_appCtrl_transition(STATE_WAIT_OK);
+            break;
+        case EVT_CMD_OK:
+            uart2_send("\r");
             break;
         default:
             break;
@@ -59,6 +62,7 @@ void fsm_appCtrl_run(sys_event evt)
             break;
         case EVT_STATE_EXIT:
             swTim_clear(&arq_tim);
+            uart2_send("\r");
             break;
         case EVT_CMD_OK:
             fsm_appCtrl_transition(STATE_WAIT_RST);
